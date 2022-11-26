@@ -9,7 +9,7 @@ function Form() {
     let url = "https://63820c5e9842ca8d3c9fd873.mockapi.io/"
     useEffect( () => {
         axios.get(`${url}/list/`).then(data => console.log(data))
-    },[])
+    })
     return (
         <div>
             <Formik 
