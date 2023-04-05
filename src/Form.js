@@ -9,14 +9,13 @@ import './Form.css'
 import env from '../src/environment'
 
 function Form() {
-    const[values,setValues] = useState([])
+    const[dataValues,setValues] = useState([])
 
     const listMovies = useCallback( async() => {
         try {
             let res = await axios.get(`${env.apiurl}/data/`)
             if(res.data.statusCode === 200) {
                 setValues(res.data.lists)
-                console.log(res.data.lists)
             }
         }catch(err) {
             console.log(err)
@@ -26,20 +25,6 @@ function Form() {
     useEffect(() =>{
         listMovies()
     },[listMovies]) 
-
-    const updateList = async() => {
-        console.log(values)
-        try {
-            let res = await axios.post(`${env.apiUrl}/data/`,{
-                values
-            })
-            console.log(res)
-        }catch(err) {
-            console.log(err)
-        }   
-       
-    }
-
     return (
         <div>
             <Formik 
@@ -57,18 +42,26 @@ function Form() {
                     } 
                     return errors ;
                 }}
-                onSubmit={(values) =>{
-                    updateList(values)
+                onSubmit={ async(values) =>{
+                    console.log(values)
+                    try {
+                        let res = await axios.post(`${env.apiurl}/data/`,{
+                           values
+                        })
+                        console.log(res)
+                    }catch(err) {
+                        console.log(err)
+                    } 
                 }}>
                 {({ values , errors , handleSubmit , handleChange}) => {
                     return (
                         <>
-                            <section className="vh-100" style={{"background-color": "#508bfc"}}>
+                            <section className="vh-100" style={{"backgroundColor": "#508bfc"}}>
                             <div className="container py-5  h-100">
-                                <div className="row d-flex justify-content-center align-items-center h-100">
-                                    <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                                        <div className="card shadow-2-strong" style={{"border-radius": "1rem"}}>
-                                            <div className="card-body p-2 text-center"></div>
+                                <div className="row d-flex justify-content-center align-items-center" >
+                                    <div className="col-12 col-md-8 col-lg-6 col-xl-5" >
+                                        <div className="card shadow-2-strong" style={{"borderRadius": "1rem"}}>
+                                            <div className="card-body p-2 text-center">
                                                 <form onSubmit={handleSubmit}>
                                                     <TextField id="standard-basic" label="Movie-name" type="text"
                                                     variant="standard" value={values.movieName} 
@@ -86,10 +79,33 @@ function Form() {
                                                     {errors.ratings ? errors.ratings : ""}<br/>
 
                                                     <Button variant="primary" type="submit" 
-                                                    onSubmit={(e) =>handleSubmit(e)}>Submit</Button>    
+                                                    onSubmit={handleSubmit}>Submit</Button>    
                                                 </form>
                                             </div>
                                         </div>
+                                        </div>
+                                        <table className='table-details'>
+                                                <thead >
+                                                    <tr className='table-heading'>
+                                                        <th >Movie Name</th>
+                                                        <th >Langauge</th>
+                                                        <th >Ratings</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                   dataValues.length > 0 && dataValues.map((value,i) => {
+                                                        return (
+                                                            <tr className='table-body' key={i}> 
+                                                            <td>{value.movieName}</td>
+                                                            <td>{value.language}</td>
+                                                            <td>{value.ratings}</td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
+                                        </table>  
                                     </div>
                                 </div>
                             </section>
