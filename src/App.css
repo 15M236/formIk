@@ -13,5 +13,11 @@
   border : 0.2rem solid white;
   /* display: flex; */
   /* flex-direction: row; */
-  /* justify-content: space-evenly; */
+  justify-content: space-around;
+}
+
+.table-body {
+  /* display: flex; */
+  /* flex-direction: row; */
+  justify-content: space-around;
 }
