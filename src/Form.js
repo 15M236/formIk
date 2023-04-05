@@ -43,12 +43,11 @@ function Form() {
                     return errors ;
                 }}
                 onSubmit={ async(values) =>{
-                    console.log(values)
                     try {
-                        let res = await axios.post(`${env.apiurl}/data/`,{
-                           values
+                            await axios.post(`${env.apiurl}/data/`,{
+                            values
                         })
-                        console.log(res)
+                        listMovies()
                     }catch(err) {
                         console.log(err)
                     } 
